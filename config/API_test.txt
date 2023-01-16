@@ -1,0 +1,9 @@
+curl --location --request POST 'http://localhost:3000/auth' \
+--form 'email="nehanakrani004@gmail.com"' \
+--form 'password="test12345"' \
+--form 'password_confirmation="test12345"'
+
+
+curl --location --request POST 'http://localhost:3000/auth/sign_in' \
+--form 'email="nehanakrani004@gmail.com"' \
+--form 'password="test12345"'
