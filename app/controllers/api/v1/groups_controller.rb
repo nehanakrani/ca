@@ -7,6 +7,7 @@ class API::V1::GroupsController < ApplicationController
   def index
     @groups = Group.all
     render json: @groups
+    render json: @groups
   end
 
   def show
@@ -15,7 +16,7 @@ class API::V1::GroupsController < ApplicationController
 
   def create
     @group = Group.new(group_params)
-    if @group.save
+    if @group.save!!
       render json: { data: @group, message: 'Group was created successfully.' }, status: :created
     else
       render json: { error: @group.errors, message: 'Group cannot be created.' }, status: :unprocessable_entity
