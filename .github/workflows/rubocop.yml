@@ -1,15 +1,33 @@
 name: Linters
 
-on: [push]
+on:
+  pull_request:
+    branches: [api-project-alpine]
+  push:
+    branches: [api-project-alpine]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  avoid_redundancy:
+    name: avoid redundancy
+    runs-on: ubuntu-20.04
+
     steps:
-      - uses: actions/checkout@v1
-      - name: RuboCop Linter
-        uses: andrewmcodes/rubocop-linter-action@v3.3.0
+      - name: cancel workflow action
+        uses: styfle/cancel-workflow-action@0.9.1
         with:
-          action_config_path: ".github/config/rubocop_linter_action.yml" # Note: this is the default location
+          access_token: ${{ github.token }}
+
+  lint:
+    needs: [avoid_redundancy]
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: checkout project
+        uses: actions/checkout@v3
+        with:
+          # fetch all history for all tags and branches
+          fetch-depth: 0
+      - name: rubocop linter action
+        uses: andrewmcodes/rubocop-linter-action@v3.3.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
